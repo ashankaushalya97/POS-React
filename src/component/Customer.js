@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { Form, Icon, Input, Button, Row,Col ,Table} from 'antd';
 import 'antd/dist/antd.css';
 // import '../component/Customer.css'
 
@@ -16,10 +16,56 @@ function CustomerForm(props){
 
       const { getFieldDecorator } = props.form;
 
+      const dataSource = [
+        {
+          key: '1',
+          id: 'C001',
+          name: "Mike",
+          address: '10 Downing Street',
+        },
+        {
+            key: '2',
+            id: 'C002',
+            name: "John",
+            address: '10 Downing Street',
+          },
+          {
+            key: '3',
+            id: 'C003',
+            name: "Adams",
+            address: '10 Downing Street',
+          },
+      ];
+      
+      const columns = [
+        {
+          title: 'ID',
+          dataIndex: 'id',
+          key: 'id',
+        },
+        {
+          title: 'Customer Name',
+          dataIndex: 'name',
+          key: 'name',
+        },
+        {
+          title: 'Address',
+          dataIndex: 'address',
+          key: 'address',
+        },
+      ];
+
+
+
+
     return(
-        <div>
-            <h2><Icon type="user-add" /> Manage Customers</h2>
-       <Form onSubmit={handleSubmit} className="login-form">
+        <div className="col-12">
+           
+       
+      <Row type="flex" justify="space-between">
+      <Col span={12}>
+      <h2><Icon type="user-add" /> Manage Customers</h2>
+      <Form onSubmit={handleSubmit} className="login-form">
         <Form.Item>
           {getFieldDecorator('id', {
             rules: [{ required: true, message: 'Please input customer ID' }],
@@ -58,6 +104,13 @@ function CustomerForm(props){
           </Button>
         </Form.Item>
       </Form>
+      </Col>
+
+      <Col span={11}>
+        <Table dataSource={dataSource} columns={columns} />;
+      </Col>      
+
+     </Row>       
 
         </div>
     );
