@@ -1,25 +1,43 @@
+
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import ReactDOM from 'react-dom';
+import 'antd/dist/antd.css';
+import './index.css';
+import { Layout, Menu, Breadcrumb } from 'antd';
+import Form from "./component/Form"
 
 function App() {
+  const { Header, Content, Footer } = Layout;
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <div>
+    <Layout className="layout">
+    <Header>
+      <div className="logo" />
+      <Menu
+        theme="dark"
+        mode="horizontal"
+        defaultSelectedKeys={['2']}
+        style={{ lineHeight: '64px' }}
+      >
+        <Menu.Item key="1">Customers</Menu.Item>
+        <Menu.Item key="2">Items</Menu.Item>
+        <Menu.Item key="3">Orders</Menu.Item>
+      </Menu>
+    </Header>
+    <Content style={{ padding: '0 50px' }}>
+      <Breadcrumb style={{ margin: '16px 0' }}>
+        <Breadcrumb.Item>Home</Breadcrumb.Item>
+        <Breadcrumb.Item>Customers</Breadcrumb.Item>
+      </Breadcrumb>
+      <div style={{ background: '#fff', padding: 24, minHeight: 280 }}> <h4>Manage Customers</h4></div>
+
+     <Form/>
+
+    </Content>
+    <Footer style={{ textAlign: 'center' }}></Footer>
+  </Layout>
+  </div>
   );
 }
 
