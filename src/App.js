@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
 import './index.css';
 import { Layout, Menu, Breadcrumb } from 'antd';
-import Form from "./component/Form"
+// import Form from "./component/Form"
 
 function App() {
   const { Header, Content, Footer } = Layout;
@@ -32,7 +32,7 @@ function App() {
       </Breadcrumb>
       <div style={{ background: '#fff', padding: 24, minHeight: 280 }}> <h4>Manage Customers</h4></div>
 
-     <Form/>
+     {/* <Form/> */}
 
     </Content>
     <Footer style={{ textAlign: 'center' }}></Footer>
