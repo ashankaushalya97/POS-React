@@ -18,40 +18,44 @@ function CustomerForm(props){
 
     return(
         <div>
-             <Form onSubmit={handleSubmit} className="login-form">
+            <h2><Icon type="user-add" /> Manage Customers</h2>
+       <Form onSubmit={handleSubmit} className="login-form">
         <Form.Item>
-          {getFieldDecorator('username', {
-            rules: [{ required: true, message: 'Please input your username!' }],
+          {getFieldDecorator('id', {
+            rules: [{ required: true, message: 'Please input customer ID' }],
+          })(
+            <Input
+              prefix={<Icon type="safety-certificate" style={{ color: 'rgba(0,0,0,.25)' }} />}
+              placeholder="Customer ID"
+            />,
+          )}
+        </Form.Item>
+        <Form.Item>
+          {getFieldDecorator('name', {
+            rules: [{ required: true, message: 'Please input customer name' }],
           })(
             <Input
               prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-              placeholder="Username"
+              placeholder="Customer Name"
             />,
           )}
         </Form.Item>
         <Form.Item>
-          {getFieldDecorator('password', {
-            rules: [{ required: true, message: 'Please input your Password!' }],
+          {getFieldDecorator('address', {
+            rules: [{ required: true, message: 'Please input address' }],
           })(
             <Input
-              prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-              type="password"
-              placeholder="Password"
+              prefix={<Icon type="home" style={{ color: 'rgba(0,0,0,.25)' }} />}
+              placeholder="Address"
             />,
           )}
-        </Form.Item>
+        </Form.Item>   
+
         <Form.Item>
-          {getFieldDecorator('remember', {
-            valuePropName: 'checked',
-            initialValue: true,
-          })(<Checkbox>Remember me</Checkbox>)}
-          <a className="login-form-forgot" href="">
-            Forgot password
-          </a>
+          
           <Button type="primary" htmlType="submit" className="login-form-button">
-            Log in
+            Submit
           </Button>
-          Or <a href="">register now!</a>
         </Form.Item>
       </Form>
 
