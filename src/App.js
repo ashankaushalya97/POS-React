@@ -1,9 +1,12 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+// import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+
 import 'antd/dist/antd.css';
 import './index.css';
 import { Layout, Menu, Breadcrumb } from 'antd';
+// import BasicRoute from './routes';
 // import Form from "./component/Form"
 
 function App() {
@@ -20,9 +23,18 @@ function App() {
         defaultSelectedKeys={['2']}
         style={{ lineHeight: '64px' }}
       >
-        <Menu.Item key="1">Customers</Menu.Item>
-        <Menu.Item key="2">Items</Menu.Item>
-        <Menu.Item key="3">Orders</Menu.Item>
+        <Menu.Item key="1" >
+          <span>Dashboard</span>
+        </Menu.Item>
+        <Menu.Item key="2" >
+          <span>Customers</span>
+        </Menu.Item>
+        <Menu.Item key="3">          
+          <span>Items</span>
+        </Menu.Item>
+        <Menu.Item key="4">          
+          <span>Order</span>
+        </Menu.Item>
       </Menu>
     </Header>
     <Content style={{ padding: '0 50px' }}>
