@@ -98,10 +98,17 @@ function CustomerForm(props){
         </Form.Item>   
 
         <Form.Item>
-          
-          <Button type="primary" htmlType="submit" className="login-form-button">
-            Submit
-          </Button>
+          <Row type="flex" justify="space-around">
+            <Button type="primary" htmlType="submit" className="login-form-button">
+                Save
+            </Button>
+            <Button type="default" htmlType="submit" className="login-form-button">
+                Clear
+            </Button>
+            <Button type="danger" htmlType="submit" className="login-form-button">
+                Delete
+            </Button>
+          </Row>
         </Form.Item>
       </Form>
       </Col>
