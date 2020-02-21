@@ -5,6 +5,10 @@ import 'antd/dist/antd.css';
 
 function CustomerForm(props){
 
+    const btnStyle = {
+        margin:10
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
         props.form.validateFields((err, values) => {
@@ -98,14 +102,14 @@ function CustomerForm(props){
         </Form.Item>   
 
         <Form.Item>
-          <Row type="flex" justify="space-around">
-            <Button type="primary" htmlType="submit" className="login-form-button">
+          <Row >
+            <Button style={btnStyle} type="primary" htmlType="submit" className="login-form-button">
                 Save
             </Button>
-            <Button type="default" htmlType="submit" className="login-form-button">
+            <Button style={btnStyle} type="default" htmlType="submit" className="login-form-button">
                 Clear
             </Button>
-            <Button type="danger" htmlType="submit" className="login-form-button">
+            <Button style={btnStyle} type="danger" htmlType="submit" className="login-form-button">
                 Delete
             </Button>
           </Row>
