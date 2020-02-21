@@ -1,7 +1,7 @@
 import React from 'react'
 import 'antd/dist/antd.css';
 import '../css/style.scss'
-import { Form, Icon, Input, Button,Row,Col } from 'antd';
+import { Form, Icon, Input, Button,Row,Col, Table } from 'antd';
 
 
 function Item(props) {
@@ -14,6 +14,43 @@ function Item(props) {
       }
     });
   };
+
+  const columns = [
+    { title: 'Code', dataIndex: 'code', key: 'code' },
+    { title: 'Description', dataIndex: 'description', key: 'description' },
+    { title: 'Qty', dataIndex: 'qty', key: 'qty' },
+    { title: 'Unitprice', dataIndex: 'unitprice', key: 'unitprice' },
+    {
+      title: 'Action',
+      dataIndex: '',
+      key: 'x',
+      render: () => <a>Delete</a>,
+    },
+  ];
+  
+  const data = [
+    {
+      key: 1,
+      code: 'I001',
+      description: 'Laptop',
+      qty: 50,
+      unitprice: 145000.00,
+    },
+    {
+      key: 2,
+      code: 'I002',
+      description: 'Keyboard',
+      qty: 200,
+      unitprice: 22000.00,
+    },
+    {
+      key: 3,
+      code: 'I002',
+      description: 'Mouse',
+      qty: 100,
+      unitprice: 5000.00,
+    },
+  ];
     const { getFieldDecorator } = props.form;
 
     return (
@@ -92,14 +129,21 @@ function Item(props) {
                       <Button type="default" htmlType="button" className="login-form-button">
                         Clear
                       </Button>&nbsp;&nbsp;
-                      <Button type="danger" htmlType="submit" className="login-form-button">
+                      {/* <Button type="danger" htmlType="submit" className="login-form-button">
                         Delete
-                      </Button>
+                      </Button> */}
                     </Form.Item>
                   </div>
                 </Col>
               </Row>
-
+              <Row>
+                <Col span={24}>
+                <Table
+                  columns={columns}
+                  expandedRowRender={record => <p style={{ margin: 0 }}>{record.description}</p>}
+                  dataSource={data}/>
+                </Col>
+              </Row>
 
                
               </Form>
