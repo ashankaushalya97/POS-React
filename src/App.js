@@ -11,7 +11,6 @@ import BasicRoute from './routes';
 
 function App() {
   const { Header, Content, Footer } = Layout;
-  
   return (
     <div>
     <Layout className="layout">
@@ -21,6 +20,7 @@ function App() {
         theme="dark"
         mode="horizontal"
         defaultSelectedKeys={[]}
+        defaultOpenKeys={['sub1']}
         style={{ lineHeight: '64px' }}
       > 
         <Menu.Item key="1"  onClick={() => document.location = "./"}>
@@ -49,7 +49,9 @@ function App() {
      {/* <Form/> */}
 
     </Content>
-    <Footer style={{ textAlign: 'center' }}></Footer>
+    <Footer style={{ textAlign: 'center' }}>
+      <p>Auxenta (Pvt) Ltd All right recived</p>
+    </Footer>
   </Layout>
   </div>
   );
