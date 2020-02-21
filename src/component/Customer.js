@@ -1,45 +1,65 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Form, Icon, Input, Button, Row,Col ,Table} from 'antd';
 import 'antd/dist/antd.css';
+// import 'axios';
 // import '../component/Customer.css'
 
 function CustomerForm(props){
 
+    const [list,setList] = useState([]);
+
+
     const btnStyle = {
         margin:10
-    }
+    };
+
+
+    const axios = require('axios');
+
+
+    // Axios.get('http://localhost:5050/api/v1/customers/').then((response)=>{
+    //     console.log(response);
+    // }).catch((error)=>{
+    //     console.log(error);
+    // });
+    // const res = useState("");
+
+        // console.log(list);
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
         props.form.validateFields((err, values) => {
           if (!err) {
-            console.log('Received values of form: ', values);
+            console.log('Received values of form: ', values.name);
+              axios.post('http://localhost:5050/api/v1/customers/', values)
+                  .then(function (response) {
+                      console.log(response);
+                  })
+                  .catch(function (error) {
+                      console.log(error);
+                  });
           }
         });
       };
 
       const { getFieldDecorator } = props.form;
 
-      const dataSource = [
-        {
-          key: '1',
-          id: 'C001',
-          name: "Mike",
-          address: '10 Downing Street',
-        },
-        {
-            key: '2',
-            id: 'C002',
-            name: "John",
-            address: '10 Downing Street',
-          },
-          {
-            key: '3',
-            id: 'C003',
-            name: "Adams",
-            address: '10 Downing Street',
-          },
-      ];
+      useEffect(()=>{
+          axios({
+              method: 'get',
+              url: 'http://localhost:5050/api/v1/customers/',
+              responseType: 'json'
+          }).then(function (response) {
+              // console.log(response.data);
+
+              // setList({list:response.data});
+              setList(response.data);
+
+              // console.log(list);
+
+          });
+      });
       
       const columns = [
         {
@@ -58,6 +78,8 @@ function CustomerForm(props){
           key: 'address',
         },
       ];
+
+
 
 
 
@@ -118,7 +140,7 @@ function CustomerForm(props){
       </Col>
 
       <Col span={11}>
-        <Table dataSource={dataSource} columns={columns} />;
+        <Table rowKey={record => record.id} dataSource={list} columns={columns} />;
       </Col>      
 
      </Row>       
