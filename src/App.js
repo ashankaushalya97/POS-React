@@ -1,13 +1,10 @@
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 import 'antd/dist/antd.css';
 import './index.css';
 import { Layout, Menu, Breadcrumb } from 'antd';
 import BasicRoute from './routes';
-// import Form from "./component/Form"
 
 function App() {
   const { Header, Content, Footer } = Layout;

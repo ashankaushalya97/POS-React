@@ -1,17 +1,20 @@
 import React, {useEffect, useState} from 'react'
 import 'antd/dist/antd.css';
 import '../css/style.scss'
-import {Button, Col, Form, Icon, Input, Row, Table} from 'antd';
+import {Button, Col, Form, Icon, Input, Row, Table, Modal, message} from 'antd';
+const { confirm } = Modal;
 
 
 function Item(props) {
 
     const [list, setList] = useState([]);
+    const [finalRecord, setDataRecord] = useState([]);
     const axios = require('axios');
 
     const btnStyle = {
         margin: 10
     };
+
 
     const icnStyle = {
         ":hover": {
@@ -19,24 +22,85 @@ function Item(props) {
             cursor:"pointer",
         },
         cursor:"pointer",
-
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
+                console.log('Received values of form: ');
+
+                if(values.code === finalRecord.code){
+
+                }
+
                 axios.post('http://localhost:5050/api/v1/items/', values)
                     .then(function (response) {
                         console.log(response)
+                        message.success( 'Item "'+values.description+'" saved successfully');
+                        clearFields();
                     })
                     .catch(function (error) {
+                        message.error('Unable to save item');
                         console.log(error)
                     })
             }
         });
     };
+
+    const assignDataToFields = (record) =>{
+        console.log(record);
+        props.form.setFieldsValue({
+            'code':record.code,
+            'description':record.description,
+            'qty':record.qty,
+            'unitPrice':record.unitPrice
+        })
+
+    }
+
+    const clearFields = () =>{
+        props.form.setFieldsValue({
+            'code':'',
+            'description':'',
+            'qty':'',
+            'unitPrice':''
+        })
+
+    }
+
+
+    const deleteRecord = (code) => {
+        console.log(code);
+        console.log("delete function is working " )
+        axios.delete('http://localhost:5050/api/v1/items/'+ code)
+            .then(function (response) {
+                console.log(response)
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
+    }
+
+    function showDeleteConfirm() {
+        confirm({
+            title: 'Are you sure delete this Item?',
+            content: 'Item descriptions',
+            okText: 'Yes',
+            okType: 'danger',
+            cancelText: 'No',
+            onOk() {
+                console.log('OK');
+                deleteRecord(finalRecord.code);
+                clearFields();
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
+    }
+
+
     const {getFieldDecorator} = props.form;
 
     useEffect(() => {
@@ -45,9 +109,13 @@ function Item(props) {
             url: 'http://localhost:5050/api/v1/items/',
             responseType: 'json'
         }).then(function (response) {
-            setList(response.data);
+            if(list==0) {
+                setList(response.data);
+            }
             });
     });
+
+
 
     const columns = [
         {title: 'Code', dataIndex: 'code', key: 'code'},
@@ -61,110 +129,12 @@ function Item(props) {
             render: (text, record) => (
                 <span>
                      {/*<Divider type="vertical"/>*/}
-                    <Icon style={icnStyle} type="rest" theme="filled" />
+                    <Icon style={icnStyle} type="rest" theme="filled"  onClick={showDeleteConfirm} />
                 </span>
             ),
         },
     ];
 
-    // return (
-    //     <div>
-    //         <Form onSubmit={handleSubmit} className="login-form">
-    //             <Row>
-    //                 <Col span={24}>
-    //                     <h2>MANAGE ITEM</h2>
-    //                 </Col>
-    //             </Row>
-    //             <Row type="flex" justify="space-around">
-    //                 <Col span={11}>
-    //                     <Form.Item>
-    //                         <h4>Item Code</h4>
-    //                         {getFieldDecorator('code', {
-    //                             rules: [{required: true, message: 'Please input your Item Code!'}],
-    //                         })(
-    //                             <Input
-    //                                 prefix={<Icon type="code" style={{color: 'rgba(0,0,0,.25)'}}/>}
-    //                                 placeholder="Item Code"
-    //                             />,
-    //                         )}
-    //                     </Form.Item>
-    //                 </Col>
-    //                 <Col span={11}>
-    //                     <Form.Item>
-    //                         <h4>Item Description</h4>
-    //                         {getFieldDecorator('description', {
-    //                             rules: [{required: true, message: 'Please input your Item Description!'}],
-    //                         })(
-    //                             <Input
-    //                                 prefix={<Icon type="code" style={{color: 'rgba(0,0,0,.25)'}}/>}
-    //                                 placeholder="Item Description"
-    //                             />,
-    //                         )}
-    //                     </Form.Item>
-    //                 </Col>
-    //             </Row>
-    //             <Row type="flex" justify="space-around">
-    //                 <Col span={11}>
-    //                     <Form.Item>
-    //                         <h4>Quantity</h4>
-    //                         {getFieldDecorator('qty', {
-    //                             rules: [{required: true, message: 'Please input your Quantity'}],
-    //                         })(
-    //                             <Input
-    //                                 prefix={<Icon type="code" style={{color: 'rgba(0,0,0,.25)'}}/>}
-    //                                 placeholder="Quantity"
-    //                             />,
-    //                         )}
-    //                     </Form.Item></Col>
-    //                 <Col span={11}>
-    //                     <Form.Item>
-    //                         <h4>Item UnitPrice</h4>
-    //                         {getFieldDecorator('unitPrice', {
-    //                             rules: [{required: true, message: 'Please input your Item UnitPrice!'}],
-    //                         })(
-    //                             <Input
-    //                                 prefix={<Icon type="code" style={{color: 'rgba(0,0,0,.25)'}}/>}
-    //                                 placeholder="UnitPrice"
-    //                             />,
-    //                         )}
-    //                     </Form.Item>
-    //                 </Col>
-    //             </Row>
-    //             <Row>
-    //                 <Col span={11}>
-    //                     <div className="button-class">
-    //                         <Form.Item>
-    //                             <Button type="primary" htmlType="submit" className="login-form-button">
-    //                                 Save
-    //                             </Button>&nbsp;&nbsp;
-    //                             {/*<Button type="primary" htmlType="submit" className="login-form-button">*/}
-    //                             {/*    Update*/}
-    //                             {/*</Button>&nbsp;&nbsp;*/}
-    //                             <Button type="default" htmlType="button" className="login-form-button">
-    //                                 Clear
-    //                             </Button>&nbsp;&nbsp;
-    //                             <Button type="danger" htmlType="submit" className="login-form-button">
-    //                                 Delete
-    //                           </Button>
-    //                         </Form.Item>
-    //                     </div>
-    //                 </Col>
-    //             </Row>
-    //             <Row>
-    //                 <Col span={24}>
-    //                     <Table
-    //                         rowKey={record => record.code}
-    //                         columns={columns}
-    //                         dataSource={list}/>
-    //
-    //                 </Col>
-    //             </Row>
-    //
-    //
-    //         </Form>
-    //
-    //     </div>
-    // );
 
     return (
         <div className="col-12">
@@ -181,6 +151,7 @@ function Item(props) {
                                 <Input
                                     prefix={<Icon type="code" style={{color: 'rgba(0,0,0,.25)'}}/>}
                                     placeholder="Item Code"
+
                                 />,
                             )}
                         </Form.Item>
@@ -191,6 +162,7 @@ function Item(props) {
                                 <Input
                                     prefix={<Icon type="code" style={{color: 'rgba(0,0,0,.25)'}}/>}
                                     placeholder="Item Description"
+                                    onChange={assignDataToFields}
                                 />,
                             )}
                         </Form.Item>
@@ -217,8 +189,11 @@ function Item(props) {
 
                         <Form.Item>
                             <Row>
-                                <Button style={btnStyle} type="primary" htmlType="submit" className="login-form-button">
+                                <Button style={btnStyle} type="primary"  htmlType="submit" className="login-form-button">
                                     Save
+                                </Button>
+                                <Button style={btnStyle} type="primary" htmlType="submit" className="login-form-button" >
+                                    Update
                                 </Button>
                                 <Button style={btnStyle} type="default" htmlType="submit" className="login-form-button">
                                     Clear
@@ -232,7 +207,22 @@ function Item(props) {
                 </Col>
 
                 <Col span={11}>
-                    <Table rowKey={record => record.code} dataSource={list} columns={columns}/>;
+                    <Table
+                        rowKey={record => record.code}
+                        onRow={(record) => ({
+                            onClick: () => {
+                                // deleteRecord(record.code)
+                                assignDataToFields(record)
+                                setDataRecord(record);
+                                // setSelectedCode(record.code);
+                                // setSelectedDes(record.description);
+                                // setSelectedQty(record.qty);
+                                // setSelectedUnitPrice(record.unitPrice);
+                            }
+                        })
+                        }
+                        dataSource={list}
+                        columns={columns}/>;
                 </Col>
 
             </Row>
