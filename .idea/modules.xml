@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/.idea/Sample-POS-React.iml" filepath="$PROJECT_DIR$/.idea/Sample-POS-React.iml" />
-=======
-      <module fileurl="file://$PROJECT_DIR$/.idea/pos-react.iml" filepath="$PROJECT_DIR$/.idea/pos-react.iml" />
->>>>>>> 8eeafc6ea646835073a1d5a1dccfadf7e7762c19
     </modules>
   </component>
 </project>

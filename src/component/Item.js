@@ -30,11 +30,9 @@ function Item(props) {
         axios({
             method: 'get',
             url: 'http://localhost:5050/api/v1/items/',
-            // header: 'Access-Control-Allow-Origin',
             responseType: 'json'
-        })
-            .then(function (response) {
-                setList(response.data);
+        }).then(function (response) {
+            setList(response.data);
             });
     });
 
@@ -42,13 +40,13 @@ function Item(props) {
         {title: 'Code', dataIndex: 'code', key: 'code'},
         {title: 'Description', dataIndex: 'description', key: 'description'},
         {title: 'Qty', dataIndex: 'qty', key: 'qty'},
-        {title: 'UnitPrice', dataIndex: 'unitPrice', key: 'unitprice'},
-        {
-            title: 'Action',
-            dataIndex: '',
-            key: 'x',
-            render: () => <a>Delete</a>,
-        },
+        {title: 'UnitPrice', dataIndex: 'unitPrice', key: 'unitPrice'},
+        // {
+        //     title: 'Action',
+        //     dataIndex: '',
+        //     key: 'x',
+        //     render: () => <a>Delete</a>,
+        // },
     ];
 
     return (
@@ -102,13 +100,13 @@ function Item(props) {
                         </Form.Item></Col>
                     <Col span={11}>
                         <Form.Item>
-                            <h4>Item Unitprice</h4>
+                            <h4>Item UnitPrice</h4>
                             {getFieldDecorator('unitPrice', {
-                                rules: [{required: true, message: 'Please input your Item Unitprice!'}],
+                                rules: [{required: true, message: 'Please input your Item UnitPrice!'}],
                             })(
                                 <Input
                                     prefix={<Icon type="code" style={{color: 'rgba(0,0,0,.25)'}}/>}
-                                    placeholder="Unitprice"
+                                    placeholder="UnitPrice"
                                 />,
                             )}
                         </Form.Item>
@@ -121,15 +119,15 @@ function Item(props) {
                                 <Button type="primary" htmlType="submit" className="login-form-button">
                                     Save
                                 </Button>&nbsp;&nbsp;
-                                <Button type="primary" htmlType="submit" className="login-form-button">
-                                    Update
-                                </Button>&nbsp;&nbsp;
+                                {/*<Button type="primary" htmlType="submit" className="login-form-button">*/}
+                                {/*    Update*/}
+                                {/*</Button>&nbsp;&nbsp;*/}
                                 <Button type="default" htmlType="button" className="login-form-button">
                                     Clear
                                 </Button>&nbsp;&nbsp;
-                                {/* <Button type="danger" htmlType="submit" className="login-form-button">
-                        Delete
-                      </Button> */}
+                                <Button type="danger" htmlType="submit" className="login-form-button">
+                                    Delete
+                              </Button>
                             </Form.Item>
                         </div>
                     </Col>
