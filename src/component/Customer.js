@@ -43,12 +43,21 @@ function CustomerForm(props) {
                 axios.post('http://localhost:5050/api/v1/customers/', values)
                     .then(function (response) {
                         console.log(response);
+                        props.form.resetFields();
                     })
                     .catch(function (error) {
                         console.log(error);
                     });
             }
         });
+    };
+
+    const rowClick = (e)=> {
+        // alert("Row Clicked");
+        console.log(e.id);
+        console.log(e.name);
+        props.form.setFieldsValue({id:e.id,name:e.name,address:e.address});
+        console.log(props.form.butto);
     };
 
     const {getFieldDecorator} = props.form;
@@ -91,7 +100,7 @@ function CustomerForm(props) {
             render: (text, record) => (
                 <span>
                      {/*<Divider type="vertical"/>*/}
-                     <Icon style={icnStyle} type="rest" theme="filled" />
+                    <Icon style={icnStyle} type="rest" theme="filled" />
                 </span>
             ),
         },
@@ -110,9 +119,9 @@ function CustomerForm(props) {
                             {getFieldDecorator('id', {
                                 rules: [{required: true, message: 'Please input customer ID'}],
                             })(
-                                <Input
-                                    prefix={<Icon type="safety-certificate" style={{color: 'rgba(0,0,0,.25)'}}/>}
-                                    placeholder="Customer ID"
+                                <Input id={"id"}
+                                       prefix={<Icon type="safety-certificate" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                       placeholder="Customer ID"
                                 />,
                             )}
                         </Form.Item>
@@ -120,9 +129,9 @@ function CustomerForm(props) {
                             {getFieldDecorator('name', {
                                 rules: [{required: true, message: 'Please input customer name'}],
                             })(
-                                <Input
-                                    prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>}
-                                    placeholder="Customer Name"
+                                <Input id={"name"}
+                                       prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                       placeholder="Customer Name"
                                 />,
                             )}
                         </Form.Item>
@@ -130,23 +139,23 @@ function CustomerForm(props) {
                             {getFieldDecorator('address', {
                                 rules: [{required: true, message: 'Please input address'}],
                             })(
-                                <Input
-                                    prefix={<Icon type="home" style={{color: 'rgba(0,0,0,.25)'}}/>}
-                                    placeholder="Address"
+                                <Input id={"address"}
+                                       prefix={<Icon type="home" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                       placeholder="Address"
                                 />,
                             )}
                         </Form.Item>
 
                         <Form.Item>
                             <Row>
-                                <Button style={btnStyle} type="primary" htmlType="submit" className="login-form-button">
+                                <Button id={"btnSave"} style={btnStyle} type="primary" htmlType="submit" className="login-form-button">
                                     Save
                                 </Button>
-                                <Button style={btnStyle} type="default" htmlType="submit" className="login-form-button">
+                                <Button style={btnStyle} type="default" htmlType="reset" className="login-form-button" onClick={()=>{props.form.resetFields()}} >
                                     Clear
                                 </Button>
-                                <Button style={btnStyle} type="danger" htmlType="submit" className="login-form-button">
-                                    Delete
+                                <Button id={"btnUpdate"} style={btnStyle} type="danger" htmlType="submit" className="login-form-button" disabled={true}>
+                                    Update
                                 </Button>
                             </Row>
                         </Form.Item>
@@ -154,7 +163,7 @@ function CustomerForm(props) {
                 </Col>
 
                 <Col span={11}>
-                    <Table rowKey={record => record.id} dataSource={list} columns={columns}/>;
+                    <Table rowKey={record => record.id} dataSource={list} columns={columns} onRowClick={rowClick} />;
                 </Col>
 
             </Row>
