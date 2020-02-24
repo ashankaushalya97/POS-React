@@ -7,6 +7,14 @@ import 'antd/dist/antd.css';
 function CustomerForm(props) {
 
     const [list, setList] = useState([]);
+    const icnStyle = {
+        ":hover": {
+            color: "#f70000",
+            cursor:"pointer",
+        },
+        cursor:"pointer",
+
+    };
 
 
     const btnStyle = {
@@ -83,7 +91,7 @@ function CustomerForm(props) {
             render: (text, record) => (
                 <span>
                      {/*<Divider type="vertical"/>*/}
-                     <Icon type="rest" theme="filled" />
+                     <Icon style={icnStyle} type="rest" theme="filled" />
                 </span>
             ),
         },
