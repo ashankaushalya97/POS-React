@@ -13,6 +13,15 @@ function Item(props) {
         margin: 10
     };
 
+    const icnStyle = {
+        ":hover": {
+            color: "#f70000",
+            cursor:"pointer",
+        },
+        cursor:"pointer",
+
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         props.form.validateFields((err, values) => {
@@ -45,12 +54,17 @@ function Item(props) {
         {title: 'Description', dataIndex: 'description', key: 'description'},
         {title: 'Qty', dataIndex: 'qty', key: 'qty'},
         {title: 'UnitPrice', dataIndex: 'unitPrice', key: 'unitPrice'},
-        // {
-        //     title: 'Action',
-        //     dataIndex: '',
-        //     key: 'x',
-        //     render: () => <a>Delete</a>,
-        // },
+        {
+            title: 'Action',
+            dataIndex: '',
+            key: 'x',
+            render: (text, record) => (
+                <span>
+                     {/*<Divider type="vertical"/>*/}
+                    <Icon style={icnStyle} type="rest" theme="filled" />
+                </span>
+            ),
+        },
     ];
 
     // return (
@@ -209,9 +223,9 @@ function Item(props) {
                                 <Button style={btnStyle} type="default" htmlType="submit" className="login-form-button">
                                     Clear
                                 </Button>
-                                <Button style={btnStyle} type="danger" htmlType="submit" className="login-form-button">
-                                    Delete
-                                </Button>
+                                {/*<Button style={btnStyle} type="danger" htmlType="submit" className="login-form-button">*/}
+                                {/*    Delete*/}
+                                {/*</Button>*/}
                             </Row>
                         </Form.Item>
                     </Form>
