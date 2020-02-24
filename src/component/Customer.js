@@ -78,6 +78,13 @@ function CustomerForm(props) {
         });
     });
 
+    const icnDelete = (e)=>{
+      // alert(e);
+
+        console.log(e.target);
+    };
+
+
     const columns = [
         {
             title: 'ID',
@@ -100,7 +107,7 @@ function CustomerForm(props) {
             render: (text, record) => (
                 <span>
                      {/*<Divider type="vertical"/>*/}
-                    <Icon style={icnStyle} type="rest" theme="filled" />
+                    <Icon style={icnStyle} type="rest" theme="filled" onClick={icnDelete} />
                 </span>
             ),
         },
