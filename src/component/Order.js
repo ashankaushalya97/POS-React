@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react'
-import {Button, Col, Form, Icon, Input, Row, Table} from "antd";
+import {Button, Col, Form, Icon, Input, Row, Table, AutoComplete, Select, Divider} from "antd";
+// const { Option } = Select;
+
 
 function Order(props) {
     const [list, setList] = useState([]);
@@ -13,12 +15,7 @@ function Order(props) {
         {title: 'Description', dataIndex: 'description', key: 'description'},
         {title: 'Qty', dataIndex: 'qty', key: 'qty'},
         {title: 'UnitPrice', dataIndex: 'unitPrice', key: 'unitPrice'},
-        // {
-        //     title: 'Action',
-        //     dataIndex: '',
-        //     key: 'x',
-        //     render: () => <a>Delete</a>,
-        // },
+
     ];
     const {getFieldDecorator} = props.form;
 
@@ -34,12 +31,31 @@ function Order(props) {
     useEffect(() => {
         axios({
             method: 'get',
-            // url: 'http://localhost:5050/api/v1/items/',
+            url: 'http://localhost:5050/api/v1/customers/',
             responseType: 'json'
         }).then(function (response) {
-            setList(response.data);
+            if(list == 0){
+                setList(response.data)
+            }
         });
     });
+
+    const onChange = (value) => {
+        console.log(`selected ${value}`);
+    }
+    //
+    // const onBlur = () =>{
+    //     console.log('blur');
+    // }
+    //
+    // const onFocus = () => {
+    //     console.log('focus');
+    // }
+    //
+    const onSearch = (val) => {
+        // console.log('search:', val);
+        list.id = val
+    }
 
     return (
         <div>
@@ -47,68 +63,155 @@ function Order(props) {
                 <Row type="flex" justify="space-between">
                     <Col span={12}>
                         <h2><Icon type="form"/> Manage Orders</h2>
-                        <Form onSubmit={handleSubmit} className="login-form">
+                    </Col>
+                </Row>
+                <Row type="flex" justify="space-between">
+                    <Col span={12}>
+                        <Form.Item>
+                            {getFieldDecorator('id', {
+                                rules: [{required: true, message: 'Please input Item Code'}],
+                            })(
+
+                                // <AutoComplete
+                                //     dataSource={props.list}
+                                //     onSearch={onSearch}
+                                //     onChange={onChange}
+                                //     prefix={<Icon type="code" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                //     placeholder="Customer ID"
+                                //
+                                // />,
+                                <Input
+                                    prefix={<Icon type="code" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                    placeholder="Customer ID"
+                                />,
+                            )}
+                        </Form.Item>
+                        <Form.Item>
+                            {getFieldDecorator('address', {
+                                rules: [{required: true, message: 'Please input Item Description'}],
+                            })(
+                                <Input
+                                    prefix={<Icon type="code" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                    placeholder="Customer Address"
+                                />,
+                            )}
+                        </Form.Item>
+                    </Col>
+                        <Col span={11}>
                             <Form.Item>
-                                {getFieldDecorator('code', {
-                                    rules: [{required: true, message: 'Please input Item Code'}],
-                                })(
-                                    <Input
-                                        prefix={<Icon type="code" style={{color: 'rgba(0,0,0,.25)'}}/>}
-                                        placeholder="Item Code"
-                                    />,
-                                )}
-                            </Form.Item>
-                            <Form.Item>
-                                {getFieldDecorator('description', {
+                                {getFieldDecorator('name', {
                                     rules: [{required: true, message: 'Please input Item Description'}],
                                 })(
                                     <Input
                                         prefix={<Icon type="code" style={{color: 'rgba(0,0,0,.25)'}}/>}
-                                        placeholder="Item Description"
+                                        placeholder="Customer Name"
                                     />,
                                 )}
                             </Form.Item>
-                            <Form.Item>
-                                {getFieldDecorator('qty', {
-                                    rules: [{required: true, message: 'Please input Item Quantity'}],
-                                })(
-                                    <Input
-                                        prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>}
-                                        placeholder="Item Quantity"
-                                    />,
-                                )}
-                            </Form.Item>
-                            <Form.Item>
-                                {getFieldDecorator('unitPrice', {
-                                    rules: [{required: true, message: 'Please input Item UnitPrice'}],
-                                })(
-                                    <Input
-                                        prefix={<Icon type="home" style={{color: 'rgba(0,0,0,.25)'}}/>}
-                                        placeholder="Item UnitPrice"
-                                    />,
-                                )}
-                            </Form.Item>
+                        </Col>
+                </Row>
+                <Divider className="divider-margin"/>
+                <Row type="flex" justify="space-between">
+                    <Col span={12}>
+                        <Form.Item>
+                            {getFieldDecorator('code', {
+                                rules: [{required: true, message: 'Please input Item Code'}],
+                            })(
 
-                            <Form.Item>
-                                <Row>
-                                    <Button style={btnStyle} type="primary" htmlType="submit" className="login-form-button">
-                                        Save
-                                    </Button>
-                                    <Button style={btnStyle} type="default" htmlType="submit" className="login-form-button">
-                                        Clear
-                                    </Button>
-                                    <Button style={btnStyle} type="danger" htmlType="submit" className="login-form-button">
-                                        Delete
-                                    </Button>
-                                </Row>
-                            </Form.Item>
-                        </Form>
+                                // <AutoComplete
+                                //     dataSource={props.list}
+                                //     onSearch={onSearch}
+                                //     onChange={onChange}
+                                //     prefix={<Icon type="code" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                //     placeholder="Customer ID"
+                                //
+                                // />,
+                                <Input
+                                    prefix={<Icon type="code" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                    placeholder="Item Code"
+                                />,
+                            )}
+                        </Form.Item>
+                        <Row type="flex" justify="space-between">
+                            <Col span={11}>
+                                <Form.Item>
+                                    {getFieldDecorator('qtyOnHand', {
+                                        rules: [{required: true, message: 'Please input Item Description'}],
+                                    })(
+                                        <Input
+                                            prefix={<Icon type="code" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                            placeholder="Quantity on Hand"
+                                        />,
+                                    )}
+                                </Form.Item>
+                            </Col>
+                            <Col span={11}>
+                                <Form.Item>
+                                    {getFieldDecorator('qty', {
+                                        rules: [{required: true, message: 'Please input Item Description'}],
+                                    })(
+                                        <Input
+                                            prefix={<Icon type="code" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                            placeholder="Quantity"
+                                        />,
+                                    )}
+                                </Form.Item>
+                            </Col>
+                        </Row>
                     </Col>
-
                     <Col span={11}>
-                        <Table rowKey={record => record.id} dataSource={list} columns={columns}/>;
+                        <Form.Item>
+                            {getFieldDecorator('description', {
+                                rules: [{required: true, message: 'Please input Item Description'}],
+                            })(
+                                <Input
+                                    prefix={<Icon type="code" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                    placeholder="Item Description"
+                                />,
+                            )}
+                        </Form.Item>
+                        <Button type="primary"  htmlType="submit" className="login-form-button">
+                            Add
+                        </Button>
+                        <Button style={btnStyle} type="default" htmlType="submit" className="login-form-button">
+                            Clear
+                        </Button>
                     </Col>
+                </Row>
+                <Divider className="divider-margin"/>
+                <Row type="flex" justify="space-between">
+                    <Col span={20}>
+                        <Table
+                            rowKey={record => record.id}
+                            // onRow={(record) => ({
+                            //     onClick: () => {
+                            //         // deleteRecord(record.code)
+                            //         // assignDataToFields(record)
+                            //         // setDataRecord(record);
+                            //         // setSelectedCode(record.code);
+                            //         // setSelectedDes(record.description);
+                            //         // setSelectedQty(record.qty);
+                            //         // setSelectedUnitPrice(record.unitPrice);
+                            //     }
+                            // })
+                            // }
+                            dataSource={list}
+                            columns={columns}/>;
+                    </Col>
+                    <Col span={3}>
+                        <Row>
+                            <div  className="total-label">
+                                <label>0.00</label>
+                            </div>
+                            <div className="place-order-button">
+                                <Button type="primary"  htmlType="submit" className="login-form-button">
+                                    Place Order
+                                </Button>
+                            </div>
 
+
+                        </Row>
+                    </Col>
                 </Row>
 
             </div>
