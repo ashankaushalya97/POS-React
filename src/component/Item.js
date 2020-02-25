@@ -31,7 +31,16 @@ function Item(props) {
                 console.log('Received values of form: ');
 
                 if(values.code === finalRecord.code){
-
+                    axios.put('http://localhost:5050/api/v1/items/'+values.code, values)
+                        .then(function (response) {
+                            console.log(response)
+                            message.success( 'Item "'+values.description+'" updated successfully');
+                            clearFields();
+                        })
+                        .catch(function (error) {
+                            message.error('Unable to update item');
+                            console.log(error)
+                        })
                 }
 
                 axios.post('http://localhost:5050/api/v1/items/', values)
