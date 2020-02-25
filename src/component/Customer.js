@@ -15,7 +15,7 @@ function CustomerForm(props) {
         cursor:"pointer",
 
     };
-    const [updateBtn,setUpdateBtn] = useState(true);
+    const [disableState,setdisableState] = useState(true);
 
 
     const btnStyle = {
@@ -26,15 +26,7 @@ function CustomerForm(props) {
     const axios = require('axios');
 
 
-    // Axios.get('http://localhost:5050/api/v1/customers/').then((response)=>{
-    //     console.log(response);
-    // }).catch((error)=>{
-    //     console.log(error);
-    // });
-    // const res = useState("");
-
-    // console.log(list);
-
+ 
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -58,7 +50,7 @@ function CustomerForm(props) {
         console.log(e.id);
         console.log(e.name);
         props.form.setFieldsValue({id:e.id,name:e.name,address:e.address});
-        setUpdateBtn(false);
+        setdisableState(false);
     };
 
     const {getFieldDecorator} = props.form;
@@ -80,10 +72,25 @@ function CustomerForm(props) {
     });
 
     const icnDelete = (e)=>{
-      // alert(e);
-
         console.log(e.target);
     };
+
+    const updateBtn = (e)=>{
+      console.log(props.form.getFieldValue("id"));
+      console.log(props.form.getFieldsValue());
+
+        axios.put('http://localhost:5050/api/v1/customers/'+props.form.getFieldValue("id"), props.form.getFieldsValue())
+            .then(function (response) {
+                console.log(response);
+                props.form.resetFields();
+                setdisableState(true);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+    };
+    
 
 
     const columns = [
@@ -127,7 +134,7 @@ function CustomerForm(props) {
                             {getFieldDecorator('id', {
                                 rules: [{required: true, message: 'Please input customer ID'}],
                             })(
-                                <Input disabled={!updateBtn} id={"id"}
+                                <Input disabled={!disableState} id={"id"}
                                        prefix={<Icon type="safety-certificate" style={{color: 'rgba(0,0,0,.25)'}}/>}
                                        placeholder="Customer ID"
                                 />,
@@ -156,13 +163,13 @@ function CustomerForm(props) {
 
                         <Form.Item>
                             <Row>
-                                <Button id={"btnSave"} style={btnStyle} disabled={!updateBtn} type="primary" htmlType="submit" className="login-form-button">
+                                <Button id={"btnSave"} style={btnStyle} disabled={!disableState} type="primary" htmlType="submit" className="login-form-button">
                                     Save
                                 </Button>
-                                <Button style={btnStyle} type="default" htmlType="reset" className="login-form-button" onClick={()=>{props.form.resetFields(); setUpdateBtn(true);}} >
+                                <Button style={btnStyle} type="default" htmlType="reset" className="login-form-button" onClick={()=>{props.form.resetFields(); setdisableState(true);}} >
                                     Clear
                                 </Button>
-                                <Button id={"btnUpdate"} style={btnStyle} disabled={updateBtn} type="danger" htmlType="submit" className="login-form-button">
+                                <Button id={"btnUpdate"} onClick={updateBtn} style={btnStyle} disabled={disableState} type="danger" htmlType="submit" className="login-form-button">
                                     Update
                                 </Button>
                                 {/*<input id={"clickBtn"} type="button" value={"Click"} disabled={true}/>*/}
