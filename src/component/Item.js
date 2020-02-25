@@ -25,6 +25,23 @@ function Item(props) {
         cursor:"pointer",
     };
 
+    useEffect(() => {
+        loadAllData();
+    },[]);
+
+
+    const loadAllData = () =>{
+        axios({
+            method: 'get',
+            url: 'http://localhost:5050/api/v1/items/',
+            responseType: 'json'
+        }).then(function (response) {
+            setList(response.data);
+        }).catch(function (error) {
+            console.log(error)
+        });
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
         props.form.validateFields((err, values) => {
@@ -37,6 +54,7 @@ function Item(props) {
                             setDisableState(true);
                             message.success( 'Item "'+values.description+'" updated successfully');
                             props.form.resetFields();
+                            loadAllData();
                         })
                         .catch(function (error) {
                             message.error('Unable to update item');
@@ -49,6 +67,7 @@ function Item(props) {
                         console.log(response)
                         message.success( 'Item "'+values.description+'" saved successfully');
                         props.form.resetFields();
+                        loadAllData();
                     })
                     .catch(function (error) {
                         message.error('Unable to save item');
@@ -70,16 +89,6 @@ function Item(props) {
 
     }
 
-    // const clearFields = () =>{
-    //     props.form.setFieldsValue({
-    //         'code':'',
-    //         'description':'',
-    //         'qty':'',
-    //         'unitPrice':''
-    //     })
-    //
-    // }
-
 
     const deleteRecord = (code) => {
         console.log(code);
@@ -88,6 +97,7 @@ function Item(props) {
             .then(function (response) {
                 console.log(response)
                 setDisableState(true);
+                loadAllData();
             })
             .catch(function (error) {
                 console.log(error)
@@ -114,18 +124,6 @@ function Item(props) {
 
 
     const {getFieldDecorator} = props.form;
-
-    useEffect(() => {
-        axios({
-            method: 'get',
-            url: 'http://localhost:5050/api/v1/items/',
-            responseType: 'json'
-        }).then(function (response) {
-                setList(response.data);
-            });
-    });
-
-
 
     const columns = [
         {title: 'Code', dataIndex: 'code', key: 'code'},
