@@ -9,6 +9,7 @@ function Item(props) {
 
     const [list, setList] = useState([]);
     const [finalRecord, setDataRecord] = useState([]);
+    const [disableState,setDisableState] = useState(true);
     const axios = require('axios');
 
     const btnStyle = {
@@ -29,16 +30,25 @@ function Item(props) {
         props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ');
-
                 if(values.code === finalRecord.code){
-
+                    axios.put('http://localhost:5050/api/v1/items/'+values.code, values)
+                        .then(function (response) {
+                            console.log(response)
+                            setDisableState(true);
+                            message.success( 'Item "'+values.description+'" updated successfully');
+                            props.form.resetFields();
+                        })
+                        .catch(function (error) {
+                            message.error('Unable to update item');
+                            console.log(error)
+                        })
                 }
 
                 axios.post('http://localhost:5050/api/v1/items/', values)
                     .then(function (response) {
                         console.log(response)
                         message.success( 'Item "'+values.description+'" saved successfully');
-                        clearFields();
+                        props.form.resetFields();
                     })
                     .catch(function (error) {
                         message.error('Unable to save item');
@@ -50,6 +60,7 @@ function Item(props) {
 
     const assignDataToFields = (record) =>{
         console.log(record);
+        setDisableState(false);
         props.form.setFieldsValue({
             'code':record.code,
             'description':record.description,
@@ -59,15 +70,15 @@ function Item(props) {
 
     }
 
-    const clearFields = () =>{
-        props.form.setFieldsValue({
-            'code':'',
-            'description':'',
-            'qty':'',
-            'unitPrice':''
-        })
-
-    }
+    // const clearFields = () =>{
+    //     props.form.setFieldsValue({
+    //         'code':'',
+    //         'description':'',
+    //         'qty':'',
+    //         'unitPrice':''
+    //     })
+    //
+    // }
 
 
     const deleteRecord = (code) => {
@@ -76,6 +87,7 @@ function Item(props) {
         axios.delete('http://localhost:5050/api/v1/items/'+ code)
             .then(function (response) {
                 console.log(response)
+                setDisableState(true);
             })
             .catch(function (error) {
                 console.log(error)
@@ -92,7 +104,7 @@ function Item(props) {
             onOk() {
                 console.log('OK');
                 deleteRecord(finalRecord.code);
-                clearFields();
+                props.form.resetFields();
             },
             onCancel() {
                 console.log('Cancel');
@@ -109,9 +121,7 @@ function Item(props) {
             url: 'http://localhost:5050/api/v1/items/',
             responseType: 'json'
         }).then(function (response) {
-            if(list==0) {
                 setList(response.data);
-            }
             });
     });
 
@@ -148,7 +158,7 @@ function Item(props) {
                             {getFieldDecorator('code', {
                                 rules: [{required: true, message: 'Please input Item Code'}],
                             })(
-                                <Input
+                                <Input disabled={!disableState} id={"code"}
                                     prefix={<Icon type="code" style={{color: 'rgba(0,0,0,.25)'}}/>}
                                     placeholder="Item Code"
 
@@ -162,7 +172,6 @@ function Item(props) {
                                 <Input
                                     prefix={<Icon type="code" style={{color: 'rgba(0,0,0,.25)'}}/>}
                                     placeholder="Item Description"
-                                    onChange={assignDataToFields}
                                 />,
                             )}
                         </Form.Item>
@@ -189,18 +198,15 @@ function Item(props) {
 
                         <Form.Item>
                             <Row>
-                                <Button style={btnStyle} type="primary"  htmlType="submit" className="login-form-button">
+                                <Button id={"btnSave"} style={btnStyle} disabled={!disableState} type="primary"  htmlType="submit" className="login-form-button">
                                     Save
                                 </Button>
                                 <Button style={btnStyle} type="primary" htmlType="submit" className="login-form-button" >
                                     Update
                                 </Button>
-                                <Button style={btnStyle} type="default" htmlType="submit" className="login-form-button">
+                                <Button id={"btnUpdate"} style={btnStyle} disabled={disableState} type="default" htmlType="reset" onClick={()=>{props.form.resetFields(); setDisableState(true);}} className="login-form-button">
                                     Clear
                                 </Button>
-                                {/*<Button style={btnStyle} type="danger" htmlType="submit" className="login-form-button">*/}
-                                {/*    Delete*/}
-                                {/*</Button>*/}
                             </Row>
                         </Form.Item>
                     </Form>
