@@ -6,28 +6,22 @@ import 'antd/dist/antd.css';
 
 function CustomerForm(props) {
 
+    const axios = require('axios');
     const [list, setList] = useState([]);
     const [record,setRecord]=useState({});
+    const [tempCustomer,setTempCustomer] = useState({});
+    const [disableState,setdisableState] = useState(true);
+
+    const btnStyle = {
+        margin: 10
+    };
     const icnStyle = {
         ":hover": {
             color: "#f70000",
             cursor:"pointer",
         },
         cursor:"pointer",
-
     };
-    const [disableState,setdisableState] = useState(true);
-
-
-    const btnStyle = {
-        margin: 10
-    };
-
-
-    const axios = require('axios');
-
-
- 
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -38,9 +32,12 @@ function CustomerForm(props) {
                     .then(function (response) {
                         console.log(response);
                         props.form.resetFields();
+                        loadAll();
+                        message.success("Customer inserted.");
                     })
                     .catch(function (error) {
                         console.log(error);
+                        message.error("Something went wrong!");
                     });
             }
         });
@@ -55,7 +52,7 @@ function CustomerForm(props) {
 
     const {getFieldDecorator} = props.form;
 
-    useEffect(() => {
+    const loadAll = ()=>{
         axios({
             method: 'get',
             url: 'http://localhost:5050/api/v1/customers/',
@@ -63,18 +60,25 @@ function CustomerForm(props) {
         }).then(function (response) {
             setList(response.data);
         });
-    });
+    };
+
+    useEffect(() => {
+        loadAll();
+    },[]);
 
     const icnDelete = (e)=>{
-        console.log(record);
+        // console.log(record);
         axios.delete('http://localhost:5050/api/v1/customers/'+ record.id)
             .then(function (response) {
                 console.log(response);
                 props.form.resetFields();
                 setdisableState(true);
+                message.success("Customer successfully deleted.");
+                loadAll();
             })
             .catch(function (error) {
                 console.log(error);
+                message.error("Something went wrong!");
             });
     };
 
@@ -87,22 +91,15 @@ function CustomerForm(props) {
                 console.log(response);
                 props.form.resetFields();
                 setdisableState(true);
+                message.success("Customer successfully updated.");
+                loadAll();
             })
             .catch(function (error) {
                 console.log(error);
+                message.error("Something went wrong!");
             });
 
     };
-
-    function confirm(e) {
-        console.log(e);
-        message.success('Click on Yes');
-    }
-
-    function cancel(e) {
-        console.log(e);
-        message.error('Click on No');
-    }
 
 
 
