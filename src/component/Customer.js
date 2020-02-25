@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Form, Icon, Input, Button, Row, Col, Table,Divider} from 'antd';
+import {Form, Icon, Input, Button, Row, Col, Table,Divider,Popconfirm,message} from 'antd';
 import 'antd/dist/antd.css';
 // import 'axios';
 // import '../component/Customer.css'
@@ -7,6 +7,7 @@ import 'antd/dist/antd.css';
 function CustomerForm(props) {
 
     const [list, setList] = useState([]);
+    const [record,setRecord]=useState({});
     const icnStyle = {
         ":hover": {
             color: "#f70000",
@@ -46,9 +47,8 @@ function CustomerForm(props) {
     };
 
     const rowClick = (e)=> {
-        // alert("Row Clicked");
-        console.log(e.id);
-        console.log(e.name);
+        // console.log(e);
+        setRecord({id:e.id,name:e.name,address:e.address});
         props.form.setFieldsValue({id:e.id,name:e.name,address:e.address});
         setdisableState(false);
     };
@@ -61,18 +61,21 @@ function CustomerForm(props) {
             url: 'http://localhost:5050/api/v1/customers/',
             responseType: 'json'
         }).then(function (response) {
-            // console.log(response.data);
-
-            // setList({list:response.data});
             setList(response.data);
-
-            // console.log(list);
-
         });
     });
 
     const icnDelete = (e)=>{
-        console.log(e.target);
+        console.log(record);
+        axios.delete('http://localhost:5050/api/v1/customers/'+ record.id)
+            .then(function (response) {
+                console.log(response);
+                props.form.resetFields();
+                setdisableState(true);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     };
 
     const updateBtn = (e)=>{
@@ -90,7 +93,17 @@ function CustomerForm(props) {
             });
 
     };
-    
+
+    function confirm(e) {
+        console.log(e);
+        message.success('Click on Yes');
+    }
+
+    function cancel(e) {
+        console.log(e);
+        message.error('Click on No');
+    }
+
 
 
     const columns = [
@@ -114,8 +127,15 @@ function CustomerForm(props) {
             key: 'delete',
             render: (text, record) => (
                 <span>
-                     {/*<Divider type="vertical"/>*/}
-                    <Icon style={icnStyle} type="rest" theme="filled" onClick={icnDelete} />
+
+                    <Popconfirm
+                        title="Are you sure delete this customer?"
+                        onConfirm={icnDelete}
+                        okText="Yes"
+                        cancelText="No"
+                    >
+                    <Icon style={icnStyle} type="rest" theme="filled"  />
+                    </Popconfirm>,
                 </span>
             ),
         },
