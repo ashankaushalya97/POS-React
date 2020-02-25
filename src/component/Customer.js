@@ -15,6 +15,7 @@ function CustomerForm(props) {
         cursor:"pointer",
 
     };
+    const [updateBtn,setUpdateBtn] = useState(true);
 
 
     const btnStyle = {
@@ -57,7 +58,7 @@ function CustomerForm(props) {
         console.log(e.id);
         console.log(e.name);
         props.form.setFieldsValue({id:e.id,name:e.name,address:e.address});
-        console.log(props.form.butto);
+        setUpdateBtn(false);
     };
 
     const {getFieldDecorator} = props.form;
@@ -126,7 +127,7 @@ function CustomerForm(props) {
                             {getFieldDecorator('id', {
                                 rules: [{required: true, message: 'Please input customer ID'}],
                             })(
-                                <Input id={"id"}
+                                <Input disabled={!updateBtn} id={"id"}
                                        prefix={<Icon type="safety-certificate" style={{color: 'rgba(0,0,0,.25)'}}/>}
                                        placeholder="Customer ID"
                                 />,
@@ -155,15 +156,16 @@ function CustomerForm(props) {
 
                         <Form.Item>
                             <Row>
-                                <Button id={"btnSave"} style={btnStyle} type="primary" htmlType="submit" className="login-form-button">
+                                <Button id={"btnSave"} style={btnStyle} disabled={!updateBtn} type="primary" htmlType="submit" className="login-form-button">
                                     Save
                                 </Button>
-                                <Button style={btnStyle} type="default" htmlType="reset" className="login-form-button" onClick={()=>{props.form.resetFields()}} >
+                                <Button style={btnStyle} type="default" htmlType="reset" className="login-form-button" onClick={()=>{props.form.resetFields(); setUpdateBtn(true);}} >
                                     Clear
                                 </Button>
-                                <Button id={"btnUpdate"} style={btnStyle} type="danger" htmlType="submit" className="login-form-button" disabled={true}>
+                                <Button id={"btnUpdate"} style={btnStyle} disabled={updateBtn} type="danger" htmlType="submit" className="login-form-button">
                                     Update
                                 </Button>
+                                {/*<input id={"clickBtn"} type="button" value={"Click"} disabled={true}/>*/}
                             </Row>
                         </Form.Item>
                     </Form>
